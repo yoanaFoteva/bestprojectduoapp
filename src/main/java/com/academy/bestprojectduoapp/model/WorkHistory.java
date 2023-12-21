@@ -70,10 +70,10 @@ public class WorkHistory {
         this.dateTo = dateTo;
     }
 
-    public WorkHistory(long id, long projectId, LocalDate dateFrom, LocalDate dateTo) {
+    public WorkHistory(long id, long projectID, LocalDate dateFrom, LocalDate dateTo) {
         this.id = id;
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
-        this.projectID = projectId;
+        this.projectID = projectID;
     }
 }
