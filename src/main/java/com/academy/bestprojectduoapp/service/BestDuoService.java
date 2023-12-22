@@ -1,7 +1,6 @@
 package com.academy.bestprojectduoapp.service;
 
 import com.academy.bestprojectduoapp.model.WorkHistory;
-import com.academy.bestprojectduoapp.repository.WorkHistoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -11,14 +10,8 @@ import java.util.*;
 @Service
 public class BestDuoService {
 
-    private final WorkHistoryRepository workHistoryRepository;
-
-    public BestDuoService(WorkHistoryRepository workHistoryRepository) {
-        this.workHistoryRepository = workHistoryRepository;
-    }
-
     // Method to find the longest working pair
-    public long[] findLongestWorkingPair(List<WorkHistory> projects) {
+    public static long[] findLongestWorkingPair(List<WorkHistory> projects) {
         // Initialize the result array to store the longest working pair and the duration
         long[] longestPair = new long[3];
 
@@ -32,7 +25,7 @@ public class BestDuoService {
                 WorkHistory proj2 = projects.get(j);
 
                 // Check if projects have the same ProjectID
-                if (proj1.getProjectID() == proj2.getProjectID()) {
+                if (Objects.equals(proj1.getProjectID(), proj2.getProjectID())) {
                     // Calculate the overlapping days between the two projects
                     int days = calculateOverlap(proj1.getDateFrom(), proj1.getDateTo(),
                             proj2.getDateFrom(), proj2.getDateTo());
@@ -62,7 +55,7 @@ public class BestDuoService {
     }
 
     // Method to calculate the overlapping days between two date ranges
-    private int calculateOverlap(LocalDate startDate1, LocalDate endDate1, LocalDate startDate2, LocalDate endDate2) {
+    private static int calculateOverlap(LocalDate startDate1, LocalDate endDate1, LocalDate startDate2, LocalDate endDate2) {
         int overlap;
         // Check for non-overlapping scenarios
         if (startDate1.isAfter(endDate2) || startDate2.isAfter(endDate1)) {
@@ -84,7 +77,7 @@ public class BestDuoService {
     }
 
     // Method to find the result with the longest overlapping days
-    private long[] result(Map<Map<Long, Long>, Integer> mapResult) {
+    private static long[] result(Map<Map<Long, Long>, Integer> mapResult) {
         long[] longestPair = new long[3];
         int maxDays = 0;
 
