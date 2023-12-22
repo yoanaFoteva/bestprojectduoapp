@@ -3,10 +3,10 @@ package com.academy.bestprojectduoapp.controller;
 import com.academy.bestprojectduoapp.exception.ResourceNotFoundException;
 import com.academy.bestprojectduoapp.model.WorkHistory;
 import com.academy.bestprojectduoapp.repository.WorkHistoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.academy.bestprojectduoapp.service.BestDuoService;
+import com.academy.bestprojectduoapp.util.CsvReader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +21,24 @@ public class WorkHistoryController {
     @GetMapping
     public List<WorkHistory> getAllWorkHistoryData(){
         return workHistoryRepository.findAll();
+    }
+
+    @GetMapping("/best-duo")
+    public String findBestDuo(@RequestParam String filePath) {
+
+        CsvReader csvReader = new CsvReader();
+        List<WorkHistory> workHistoryList = csvReader.read(filePath);
+
+        // Use BestDuoService to find the longest working pair
+        long[] longestWorkingPair = BestDuoService.findLongestWorkingPair(workHistoryList);
+
+        // Extract info from the result
+        long emp1Id = longestWorkingPair[0];
+        long emp2Id = longestWorkingPair[1];
+        int daysWorked = (int) longestWorkingPair[2];
+
+        return "Longest Working Pair: Employee " + emp1Id + " and Employee " + emp2Id +
+                ", Days Worked: " + daysWorked;
     }
 
     // create work history data REST API
