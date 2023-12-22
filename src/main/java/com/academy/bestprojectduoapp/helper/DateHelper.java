@@ -6,27 +6,30 @@ import java.util.Locale;
 
 public class DateHelper {
 
-    public static LocalDate parseDate(String dateStr) {
-        // Check if the dateStr is NULL
-        if (dateStr == null || dateStr.trim().equalsIgnoreCase("NULL")) {
+    public static LocalDate parseDate(String dateString) {
+        // If dateTo is null add LocalDate.now()
+        if (dateString == null || dateString.trim().equalsIgnoreCase("NULL")) {
             return LocalDate.now();
         }
 
-        String[] dateFormats = {"yyyy-MM-dd", "dd-MM-yyyy", "MM/dd/yyyy"};
+        String[] dateFormats = {
+                "yyyy-MM-dd",
+                "MM/dd/yyyy",
+                "yyyyMMdd",
+                "dd/MM/yyyy",
+                "yyyy/MM/dd",
+                "dd-MMM-yyyy"
+        };
 
-        // Try parsing the date using each format
         for (String format : dateFormats) {
             try {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format, Locale.ENGLISH);
-                return LocalDate.parse(dateStr, formatter);
+                return LocalDate.parse(dateString, formatter);
             } catch (Exception ignored) {
-                // If parsing fails, ignore and try the next format
+                // Try next format
             }
         }
 
-        // If none of the formats worked
-        throw new IllegalArgumentException("Invalid date format: " + dateStr);
+        throw new IllegalArgumentException("Unable to parse date: " + dateString);
     }
-
-
 }
